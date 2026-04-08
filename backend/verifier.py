@@ -8,10 +8,7 @@ from backend.google_search import google_search
 from backend.rag_pipeline import build_context
 from database.chroma_db import search_claim, store_claim
 
-
 openai.api_key = OPENAI_API_KEY
-
-
 # Generate unique ID for claim
 def hash_claim(claim):
 
@@ -19,13 +16,12 @@ def hash_claim(claim):
         claim.lower().strip().encode()
     ).hexdigest()
 
-
 # Main verification function
 def verify_claim(claim):
 
     claim_id = hash_claim(claim)
 
-    # 1️⃣ Check if claim already exists in DB
+    # Check if claim already exists in DB
     cached = search_claim(claim)
 
     if cached:
@@ -37,15 +33,11 @@ def verify_claim(claim):
             cached["sources"] = json.loads(cached["sources"])
 
         return cached
-
-
-    # 2️⃣ If not cached → Google Search
+    # If not cached → Websearch Search
     search_results = google_search(claim)
 
     context = build_context(search_results)
-
-
-    # 3️⃣ Send context to LLM
+    # Send context to LLM
     prompt = f"""
 You are a professional fact-checking AI.
 
@@ -93,7 +85,7 @@ EXPLANATION: 3 sentences.
             explanation = line.split(":", 1)[1].strip()
 
 
-    # 4️⃣ Prepare result
+    # Prepare result
     result = {
         "verdict": verdict,
         "confidence": confidence,
@@ -104,7 +96,7 @@ EXPLANATION: 3 sentences.
     }
 
 
-    # 5️⃣ Store in ChromaDB
+    # Store in ChromaDB
     store_claim(claim, result, claim_id)
 
 

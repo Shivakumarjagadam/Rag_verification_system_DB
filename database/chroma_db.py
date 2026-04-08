@@ -2,15 +2,11 @@ import chromadb
 from chromadb.utils import embedding_functions
 from config import OPENAI_API_KEY, CHROMA_HOST
 from difflib import SequenceMatcher
-
-
 # Initialize embedding function
 embedder = embedding_functions.OpenAIEmbeddingFunction(
     api_key=OPENAI_API_KEY,
     model_name="text-embedding-3-small"
 )
-
-
 # Connect to Chroma server
 client = chromadb.HttpClient(
     host=CHROMA_HOST,
@@ -18,19 +14,15 @@ client = chromadb.HttpClient(
     ssl=True
 )
 
-
 # Create or load collection
 collection = client.get_or_create_collection(
     name="news_claims",
     embedding_function=embedder
 )
 
-
 # -------- TEXT SIMILARITY FUNCTION --------
 def text_similarity(a, b):
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
-
-
 # -------- SEARCH CLAIM --------
 def search_claim(claim):
 
