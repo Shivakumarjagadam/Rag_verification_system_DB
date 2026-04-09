@@ -5,8 +5,23 @@
 # chromadb
 
 # in deploy lib...
-streamlit>=1.32.0
-requests>=2.31.0
-openai>=1.12.0
-python-dotenv>=1.0.1
-chromadb
+# streamlit>=1.32.0
+#requests>=2.31.0
+#openai>=1.12.0
+#python-dotenv>=1.0.1
+#chromadb
+
+
+streamlit==1.32.0
+requests==2.31.0
+openai==1.12.0
+python-dotenv==1.0.1
+
+# Fix for chromadb error
+chromadb==0.4.24
+protobuf==3.20.3
+opentelemetry-api==1.24.0
+opentelemetry-sdk==1.24.0
+
+# Needed for chroma DB in cloud
+pysqlite3-binary
